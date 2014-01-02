@@ -7,10 +7,10 @@ class RecordMarshalTest < Test::Unit::TestCase
   end
 
   def test_should_dump_active_record_object
-    dumped = RecordMarshal.dump(@user)
-    assert dumped.is_a?(Array)
-    assert_equal "User", dumped[0]
-    assert_equal @user.attributes, dumped[1]
+    encoded = ::SecondLevelCache.cache_store.parser.encode(@user)
+    decoded = ::SecondLevelCache.cache_store.parser.decode(encoded)
+    assert decoded.is_a?(User)
+    assert_equal @user, decoded
   end
 
 

@@ -7,7 +7,7 @@ class ActiveRecord::FinderMethodsTest < Test::Unit::TestCase
   end
 
   def test_should_find_without_cache
-    SecondLevelCache.cache_store.clear
+    SecondLevelCache.cache_store.flush
     assert_equal @user, User.find(@user.id)
   end
 

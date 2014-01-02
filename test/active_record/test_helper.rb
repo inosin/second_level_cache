@@ -25,7 +25,7 @@ class Test::Unit::TestCase
 
   def teardown
     $sql_logger = nil
-    SecondLevelCache.cache_store.clear
+    SecondLevelCache.cache_store.flush
     DatabaseCleaner[:active_record].clean
   end
 end

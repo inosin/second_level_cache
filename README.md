@@ -5,7 +5,9 @@
 [![Build Status](https://travis-ci.org/hooopo/second_level_cache.png?branch=master)](https://travis-ci.org/hooopo/second_level_cache)
 [![Code Climate](https://codeclimate.com/github/hooopo/second_level_cache.png)](https://codeclimate.com/github/hooopo/second_level_cache)
 
-SecondLevelCache is a write-through and read-through caching library inspired by Cache Money and cache_fu, support ActiveRecord 4.
+SecondLevelCache is a write-through and read-through caching library inspired by Cache Money and cache_fu, support ActiveRecord 4. 
+
+The available storage adapters for persisting the cache: redis, memcached, dalli, memory
 
 Read-Through: Queries by ID, like `current_user.articles.find(params[:id])`, will first look in cache store and then look in the database for the results of that query. If there is a cache miss, it will populate the cache.
 
@@ -109,10 +111,31 @@ DatabaseCleaner.strategy = :truncation
 
 ## Configure
 
-In production env, we recommend to use [Dalli](https://github.com/mperham/dalli) as Rails cache store.
+In production env, we recommend to use [Dalli](https://github.com/mperham/dalli) as cache store.
+
 ```ruby
- config.cache_store = [:dalli_store, APP_CONFIG["memcached_host"], {:namespace => "ns", :compress => true}]
+  config.cache_store = SecondLevelCache::Store::Dalli.new(::Dalli::Client.new('127.0.0.1:11211'))
 ```
+
+as also you can use [memcached](https://github.com/evan/memcached):
+
+```ruby
+  config.cache_store = SecondLevelCache::Store::Memcached.new(::Memcached.new('127.0.0.1:11211', :exception_retry_limit => 1))
+```
+
+[redis](https://github.com/redis/redis-rb):
+
+
+```ruby
+config.cache_store = SecondLevelCache::Store::Redis.new(::Redis.new(:host => '127.0.0.1', :port => 6379, :db => 0))
+```
+
+local memory:
+
+```ruby
+  config.cache_store = SecondLevelCache::Store::Memory.new(50)
+```
+
 
 ## Tips: 
 
