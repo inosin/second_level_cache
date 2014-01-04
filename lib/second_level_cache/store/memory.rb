@@ -89,7 +89,7 @@ module SecondLevelCache
       #   MyApp.cache.delete('records')
       #
       def delete(key)
-        @index.delete(key)
+        @index.delete(key).nil? ? false : true
       end
 
       ##
