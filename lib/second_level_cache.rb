@@ -48,13 +48,17 @@ module SecondLevelCache
       end
 
       def read_second_level_cache(id)
-        Config.logger.debug "SLC GET: #{self.name}/#{id}"
-        SecondLevelCache.cache_store.get(second_level_cache_key(id)) if self.second_level_cache_enabled?
+        if self.second_level_cache_enabled?
+          Config.logger.debug "SLC GET: #{self.name}/#{id}"
+          SecondLevelCache.cache_store.get(second_level_cache_key(id))
+        end
       end
 
       def expire_second_level_cache(id)
-        Config.logger.debug "SLC DEL: #{self.name}/#{id}"
-        SecondLevelCache.cache_store.delete(second_level_cache_key(id)) if self.second_level_cache_enabled?
+        if self.second_level_cache_enabled?
+          Config.logger.debug "SLC DEL: #{self.name}/#{id}"
+          SecondLevelCache.cache_store.delete(second_level_cache_key(id))
+        end
       end
     end
 
@@ -63,8 +67,10 @@ module SecondLevelCache
     end
 
     def expire_second_level_cache
-      Config.logger.debug "SLC DEL: #{self.class.name}/#{id}"
-      SecondLevelCache.cache_store.delete(second_level_cache_key) if self.class.second_level_cache_enabled?
+      if self.class.second_level_cache_enabled?
+        Config.logger.debug "SLC DEL: #{self.class.name}/#{id}"
+        SecondLevelCache.cache_store.delete(second_level_cache_key)
+      end
     end
 
     def write_second_level_cache
