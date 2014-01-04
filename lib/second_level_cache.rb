@@ -20,7 +20,7 @@ module SecondLevelCache
       attr_reader :second_level_cache_options
 
       def acts_as_cached(options = {})
-        @second_level_cache_enabled = true
+        @second_level_cache_enabled = Config.second_level_cache_enabled?
         @second_level_cache_options = options
         @second_level_cache_options[:expires_in] ||= Config.expires_in
         @second_level_cache_options[:version] ||= 0

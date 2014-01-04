@@ -21,5 +21,10 @@ module SecondLevelCache
     def expires_in
       @expires_in ||= 1.week
     end
+
+    def second_level_cache_enabled?
+      @cache_store.is_a?(SecondLevelCache::Store::Base)
+    end
+
   end
 end

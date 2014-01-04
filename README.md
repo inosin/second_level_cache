@@ -111,31 +111,46 @@ DatabaseCleaner.strategy = :truncation
 
 ## Configure
 
+All configuration options are supported globally:
+
+```ruby
+SecondLevelCache.configure do |config|
+  config.cache_store = CACHE_STORE
+  config.expires_in = 2.day
+  config.logger = Padrino.logger
+  cache_key_prefix = 'slc'
+end
+```
+
 In production env, we recommend to use [Dalli](https://github.com/mperham/dalli) as cache store.
 
 ```ruby
-  config.cache_store = SecondLevelCache::Store::Dalli.new(::Dalli::Client.new('127.0.0.1:11211'))
+SecondLevelCache.configure.cache_store = SecondLevelCache::Store::Dalli.new(::Dalli::Client.new('127.0.0.1:11211'))
 ```
 
 as also you can use [memcached](https://github.com/evan/memcached):
 
 ```ruby
-  config.cache_store = SecondLevelCache::Store::Memcached.new(::Memcached.new('127.0.0.1:11211', :exception_retry_limit => 1))
+SecondLevelCache.configure.cache_store = SecondLevelCache::Store::Memcached.new(::Memcached.new('127.0.0.1:11211', :exception_retry_limit => 1))
 ```
 
 [redis](https://github.com/redis/redis-rb):
 
-
 ```ruby
-config.cache_store = SecondLevelCache::Store::Redis.new(::Redis.new(:host => '127.0.0.1', :port => 6379, :db => 0))
+SecondLevelCache.configure.cache_store = SecondLevelCache::Store::Redis.new(::Redis.new(:host => '127.0.0.1', :port => 6379, :db => 0))
 ```
 
 local memory:
 
 ```ruby
-  config.cache_store = SecondLevelCache::Store::Memory.new(50)
+SecondLevelCache.configure.cache_store = SecondLevelCache::Store::Memory.new(50)
 ```
 
+disable second level cache:
+
+```ruby
+SecondLevelCache.configure.cache_store = false
+```
 
 ## Tips: 
 
