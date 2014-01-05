@@ -80,7 +80,13 @@ module SecondLevelCache
       end
     end
 
-    alias update_second_level_cache write_second_level_cache
+    def update_second_level_cache
+      if self.class.second_level_cache_enabled?
+        Config.logger.debug "SLC UPDATE: #{self.class.name}/#{id} (expires_in: #{self.class.second_level_cache_options[:expires_in]})"
+        SecondLevelCache.cache_store.set(second_level_cache_key, self.reload, :expires_in => self.class.second_level_cache_options[:expires_in])
+      end
+    end
+
   end
 end
 

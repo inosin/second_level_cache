@@ -14,7 +14,6 @@ module SecondLevelCache
         end
       end
 
-
       module ClassMethods
         def update_counters_with_cache(id, counters)
           update_counters_without_cache(id, counters).tap do
